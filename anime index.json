@@ -1,0 +1,24 @@
+[
+  {
+    "name": "AnimePahe",
+    "id": 771294483,
+    "baseUrl": "https://animepahe.pw",
+    "lang": "en",
+    "typeSource": "single",
+    "iconUrl": "https://raw.githubusercontent.com/GafarO5/Nexus-mangayomi-extensions/main/anime/src/en/animepahe/icon.png",
+    "dateFormat": "",
+    "dateFormatLocale": "",
+    "isNsfw": false,
+    "hasCloudflare": true,
+    "sourceCodeUrl": "https://raw.githubusercontent.com/GafarO5/Nexus-mangayomi-extensions/main/anime/src/en/animepahe.js",
+    "apiUrl": "",
+    "version": "0.0.2",
+    "isManga": false,
+    "itemType": 1,
+    "isFullData": false,
+    "appMinVerReq": "0.5.0",
+    "additionalParams": "",
+    "sourceCodeLanguage": 1,
+    "notes": "Cloudflare-protected. If searches fail, open WebView, let the site load fully, back out, then Refresh."
+  }
+]
