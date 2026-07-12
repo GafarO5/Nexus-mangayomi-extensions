@@ -11,7 +11,7 @@ const mangayomiSources = [{
     "hasCloudflare": true,
     "sourceCodeUrl": "https://raw.githubusercontent.com/GafarO5/Nexus-mangayomi-extensions/main/anime/src/en/animepahe.js",
     "apiUrl": "",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "isManga": false,
     "itemType": 1,
     "isFullData": false,
@@ -26,10 +26,23 @@ class DefaultExtension extends MProvider {
     getHeaders(url) {
         // Do NOT override User-Agent -- Cloudflare cf_clearance must match
         // the WebView's own UA or the cookie is rejected.
+        //
+        // Only the /api endpoints get XHR-ish headers. Sending
+        // X-Requested-With + Accept: application/json on ordinary page loads is
+        // a bot fingerprint and Cloudflare 403s it.
+        const isApi = (url || "").includes("/api?");
+        if (isApi) {
+            return {
+                "Referer": this.source.baseUrl + "/",
+                "X-Requested-With": "XMLHttpRequest",
+                "Accept": "application/json, text/javascript, */*; q=0.01",
+                "Accept-Language": "en-US,en;q=0.9"
+            };
+        }
         return {
             "Referer": this.source.baseUrl + "/",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json, text/javascript, */*; q=0.01"
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9"
         };
     }
 
@@ -101,7 +114,7 @@ class DefaultExtension extends MProvider {
     async fetchSession(animeId) {
         const res = await new Client().get(
             `${this.source.baseUrl}/a/${animeId}`,
-            this.getHeaders("")
+            this.getHeaders(`${this.source.baseUrl}/a/${animeId}`)
         );
 
         // Prefer the post-redirect URL if the client exposes it.
@@ -124,7 +137,7 @@ class DefaultExtension extends MProvider {
         // Details come from the rendered anime page.
         const res = await new Client().get(
             `${this.source.baseUrl}/anime/${session}`,
-            this.getHeaders("")
+            this.getHeaders(`${this.source.baseUrl}/anime/${session}`)
         );
         const doc = new Document(res.body);
 
